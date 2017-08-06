@@ -1,0 +1,16 @@
+[
+{
+  "modid": "eternalwinter",
+  "name": "Eternal Winter",
+  "description": "Makes it snow everywhere. Server Side only mod",
+  "version": "1.0.0",
+  "mcversion": "${mcversion}",
+  "url": "",
+  "updateUrl": "",
+  "authorList": ["ichttt"],
+  "credits": "ichttt",
+  "logoFile": "",
+  "screenshots": [],
+  "dependencies": []
+}
+]
