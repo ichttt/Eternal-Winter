@@ -2,7 +2,7 @@
 {
   "modid": "eternalwinter",
   "name": "Eternal Winter",
-  "description": "Makes it snow everywhere. Server Side only mod",
+  "description": "Makes it snow everywhere. If it should be used server side only. you may consult the coremod in addition to this mod to display snow instead of rain on the client. To circumvent the coremod (which may break things), just install this mod on the server and on the client.",
   "version": "1.0.0",
   "mcversion": "${mcversion}",
   "url": "",

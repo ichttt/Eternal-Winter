@@ -1,7 +1,5 @@
 import javax.swing.JOptionPane
 
-boolean sign = System.hasProperty("signJar")
-
 buildscript {
     repositories {
         jcenter()
@@ -94,12 +92,11 @@ task signJar(type: SignJar, dependsOn: reobfJar) {
 
     keyStore = "C:\\Users\\Tobias\\Desktop\\ForgeWorkspace\\modKeys.jks"
     alias = "signMods"
-    if (sign) {
+    if (System.getProperty("signJar") != null) {
         storePass = JOptionPane.showInputDialog("Please enter storePass")
         keyPass = JOptionPane.showInputDialog("Please enter keyPass")
     }
 
 }
 
-if (sign)
-    build.dependsOn signJar
+build.dependsOn signJar
