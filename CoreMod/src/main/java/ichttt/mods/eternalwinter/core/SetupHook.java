@@ -23,7 +23,7 @@ public class SetupHook implements IFMLCallHook {
         Launch.blackboard.put("EternalWinterCoreVersion", LoadingHook.COREMOD_VERSION);
 
         //noinspection ConstantConditions
-        if (!ForgeVersion.mcVersion.startsWith("1.12"))//supports mc 1.12.1 as well
+        if (!ForgeVersion.mcVersion.startsWith("1.12"))//supports mc 1.12.1 and 1.12.2 as well
             ClassTransformer.logger.warn("The coremod EternalWinterCore does not support this version of mc, thing may not work!");
         return null;
     }

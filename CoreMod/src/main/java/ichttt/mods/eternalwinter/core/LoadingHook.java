@@ -1,7 +1,5 @@
 package ichttt.mods.eternalwinter.core;
 
-import net.minecraftforge.common.ForgeVersion;
-import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.relauncher.IFMLLoadingPlugin;
 
 import javax.annotation.Nullable;
@@ -13,7 +11,6 @@ import java.util.Map;
 @IFMLLoadingPlugin.SortingIndex(1015)
 @IFMLLoadingPlugin.TransformerExclusions({"ichttt.mods"})
 @IFMLLoadingPlugin.Name("Eternal Winter Core")
-@IFMLLoadingPlugin.MCVersion(ForgeVersion.mcVersion)
 public class LoadingHook implements IFMLLoadingPlugin {
     public static final String COREMOD_VERSION = "1.0.0";
 

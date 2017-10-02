@@ -18,10 +18,10 @@ import java.util.Collection;
 
 @Mod(modid = EternalWinter.MOD_ID,
         name = "Eternal Winter",
-        version = "1.0.0",
+        version = "1.0.1",
         certificateFingerprint = "7904c4e13947c8a616c5f39b26bdeba796500722",
         acceptableRemoteVersions = "*",
-        acceptedMinecraftVersions = "[1.12]",
+        acceptedMinecraftVersions = "[1.12, 1.13)",
         dependencies = "required-after:forge@[14.21.1.2417,)")
 public class EternalWinter {
     public static final String MOD_ID = "eternalwinter";
@@ -62,7 +62,7 @@ public class EternalWinter {
                 logger.warn("Unknown coremod version " + coreModVersion + ", please update this mod!");
             CoreModHandler.preloadPacket();
         } else
-            logger.warn("Missing core mod, client will have rain if the mod is missing!");
+            logger.info("Missing core mod, client will have rain if the mod is missing!");
     }
 
     @Mod.EventHandler
@@ -72,7 +72,7 @@ public class EternalWinter {
         logger.error("Found fingerprints:");
         Collection<String> fingerprints = event.getFingerprints();
         if (fingerprints.isEmpty()) {
-            logger.error("NONE");
+            logger.error("NO FINGERPRINT PRESENT ");
         } else {
             for (String s : fingerprints)
                 logger.error(s);
