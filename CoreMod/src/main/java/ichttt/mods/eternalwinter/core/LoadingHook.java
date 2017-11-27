@@ -12,7 +12,7 @@ import java.util.Map;
 @IFMLLoadingPlugin.TransformerExclusions({"ichttt.mods"})
 @IFMLLoadingPlugin.Name("Eternal Winter Core")
 public class LoadingHook implements IFMLLoadingPlugin {
-    public static final String COREMOD_VERSION = "1.0.0";
+    public static final String COREMOD_VERSION = "1.0.2";
 
     @Override
     public String[] getASMTransformerClass() {

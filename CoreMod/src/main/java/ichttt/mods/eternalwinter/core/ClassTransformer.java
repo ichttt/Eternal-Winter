@@ -25,7 +25,7 @@ public class ClassTransformer implements IClassTransformer, Opcodes {
     public byte[] transform(String name, String transformedName, byte[] basicClass) {
         if (basicClass == null || !transformedName.equals("net.minecraft.network.play.server.SPacketChunkData"))
             return basicClass;
-        logger.info("Found correct class {}, searching method", name);
+        logger.info("Found correct class " + name + ", searching method");
         STATE = TransformerState.TRANSFORMING;
         ClassNode node = new ClassNode();
         ClassReader classReader = new ClassReader(basicClass);
@@ -61,9 +61,9 @@ public class ClassTransformer implements IClassTransformer, Opcodes {
                     if (aload1.getOpcode() != ALOAD || ((VarInsnNode) aload1).var != 1) {
                         logger.fatal("Sanity check failed: Did not find ALOAD1");
                         if (aload1.getOpcode() != ALOAD)
-                            logger.fatal("Got Opcode {}, expected Opcode {}", aload1.getOpcode(), ALOAD);
+                            logger.fatal("Got Opcode " + aload1.getOpcode() + ", expected Opcode " + ALOAD);
                         else
-                            logger.fatal("Got var {}, expected var 1", ((VarInsnNode) aload1).var);
+                            logger.fatal("Got var " + ((VarInsnNode) aload1).var + ", expected var 1");
                         return false;
                     }
                     logger.info("Validation successful, patching...");
