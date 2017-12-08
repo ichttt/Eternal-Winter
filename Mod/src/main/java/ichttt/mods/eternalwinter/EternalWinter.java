@@ -3,9 +3,8 @@ package ichttt.mods.eternalwinter;
 import net.minecraft.entity.monster.EntityPolarBear;
 import net.minecraft.entity.monster.EntityStray;
 import net.minecraft.launchwrapper.Launch;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.biome.Biome;
-import net.minecraft.world.biome.BiomeOcean;
-import net.minecraft.world.biome.BiomeRiver;
 import net.minecraft.world.biome.BiomeSnow;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.config.Config;
@@ -14,16 +13,21 @@ import net.minecraftforge.fml.client.event.ConfigChangedEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.event.FMLFingerprintViolationEvent;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
+import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.fml.common.versioning.ArtifactVersion;
+import net.minecraftforge.fml.common.versioning.DefaultArtifactVersion;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import java.util.Arrays;
 import java.util.Collection;
+import java.util.Objects;
 
 @Mod(modid = EternalWinter.MOD_ID,
         name = "Eternal Winter",
-        version = "1.0.2",
+        version = "1.0.3",
         certificateFingerprint = "7904c4e13947c8a616c5f39b26bdeba796500722",
         acceptableRemoteVersions = "*",
         acceptedMinecraftVersions = "[1.10, 1.13)")
@@ -43,6 +47,21 @@ public class EternalWinter {
 
     @Mod.EventHandler
     public void init(FMLInitializationEvent event) {
+        if (Launch.blackboard.containsKey("EternalWinterCoreVersion")) {
+            String coreModVersion = (String) Launch.blackboard.get("EternalWinterCoreVersion");
+            ArtifactVersion version = new DefaultArtifactVersion(coreModVersion);
+            int compareResult = version.compareTo(new DefaultArtifactVersion("1.0.3"));
+            if (compareResult < 0)
+                logger.warn("Outdated coremod version found! CoreMod version is " + coreModVersion + " while this mod already knows that version 1.0.3 exists!");
+            else if (compareResult > 0)
+                logger.warn("Unknown coremod version " + coreModVersion + ", please update this mod!");
+            CoreModHandler.preloadPacket();
+        } else
+            logger.info("Missing core mod, client will have rain if the mod is missing!");
+    }
+
+    @Mod.EventHandler
+    public void postInit(FMLPostInitializationEvent event) { //All biomes should be known by now
         logger.debug("Modifying Biome stats...");
         int i = 0;
         boolean hasStray;
@@ -57,10 +76,15 @@ public class EternalWinter {
 
         for (Biome b : Biome.REGISTRY) {
             logger.debug("Modifying Biome " + b);
-            if (b instanceof BiomeRiver && !EternalConfig.freezeRivers)
-                continue;
-            if (b instanceof BiomeOcean && !EternalConfig.freezeOcean)
-                continue;
+            if (EternalConfig.blackListMode) {
+                ResourceLocation registryName = Objects.requireNonNull(b.getRegistryName());
+                if (Arrays.stream(EternalConfig.biomeList).anyMatch(s -> s.equals(registryName.getResourcePath()) || s.equals(registryName.toString())))
+                    continue;
+            } else {
+                ResourceLocation registryName = Objects.requireNonNull(b.getRegistryName());
+                if (Arrays.stream(EternalConfig.biomeList).noneMatch(s -> s.equals(registryName.getResourcePath()) || s.equals(registryName.toString())))
+                    continue;
+            }
             if (EternalConfig.copySnowEntities && !(b instanceof BiomeSnow)) {
                 b.spawnableCreatureList.add(new Biome.SpawnListEntry(EntityPolarBear.class, 1, 1, 2));
                 if (hasStray)
@@ -72,15 +96,6 @@ public class EternalWinter {
             i++;
         }
         logger.info("Modified " + i + " Biomes modified successful!");
-        if (Launch.blackboard.containsKey("EternalWinterCoreVersion")) {
-            String coreModVersion = (String) Launch.blackboard.get("EternalWinterCoreVersion");
-            if (coreModVersion.equals("1.0.0"))
-                logger.warn("Outdated coremod version found! CoreMod version is " + coreModVersion + " while this mod already knows that version 1.0.1 exists!");
-            else if (!coreModVersion.equals("1.0.2"))
-                logger.warn("Unknown coremod version " + coreModVersion + ", please update this mod!");
-            CoreModHandler.preloadPacket();
-        } else
-            logger.info("Missing core mod, client will have rain if the mod is missing!");
     }
 
     @Mod.EventHandler

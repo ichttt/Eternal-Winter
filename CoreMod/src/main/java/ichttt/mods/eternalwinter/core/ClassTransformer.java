@@ -25,6 +25,16 @@ public class ClassTransformer implements IClassTransformer, Opcodes {
     public byte[] transform(String name, String transformedName, byte[] basicClass) {
         if (basicClass == null || !transformedName.equals("net.minecraft.network.play.server.SPacketChunkData"))
             return basicClass;
+        try {
+            SetupHook.lateSetup(); //classes should be loaded by now
+        } catch (ClassCircularityError error) {
+            logger.fatal("Failed to do late init! Required classes could not be loaded");
+            throw error;
+        } catch (RuntimeException | Error throwable) {
+            logger.fatal("Failed to do late init! Cause: see below");
+            logger.catching(throwable);
+            throw throwable;
+        }
         logger.info("Found correct class " + name + ", searching method");
         STATE = TransformerState.TRANSFORMING;
         ClassNode node = new ClassNode();
