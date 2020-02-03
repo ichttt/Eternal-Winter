@@ -39,6 +39,6 @@ description='''Eternal Winter is a small mod that enables snow in every biome'''
 [[dependencies.eternalwinter]]
     modId="minecraft"
     mandatory=true
-    versionRange="[1.14.4,1.15)"
+    versionRange="[1.14.4,1.16)"
     ordering="NONE"
     side="BOTH"
