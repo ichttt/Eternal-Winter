@@ -20,18 +20,17 @@ public class EWConfig {
     public static class General {
 
         General(ForgeConfigSpec.Builder builder) {
-            builder.comment("General Settings").push("General");
-            addPolarBear = builder.comment("If true, every affected biome also gains polar bears").define("addPolarBear", false);
-
             listMode = builder.comment("If BLACKLIST, the list below will be treated as a blacklist what not to touch.",
                     "If WHITELIST, the will be treated as a whitelist what biomes should only be touched").defineEnum("listMode", ListMode.BLACKLIST);
 
             List<String> defaultVals = Arrays.asList("river", "ocean", "deep_ocean", "warm_ocean", "lukewarm_ocean", "cold_ocean", "deep_warm_ocean", "deep_lukewarm_ocean", "deep_cold_ocean", "deep_frozen_ocean");
             biomeList = builder.comment("The blacklist or whitelist, depending on listMode").defineList("biomeList", defaultVals, o -> true);
+
+            downfall = builder.comment("The downfall value each biome should get. If -1, EternalWinter will keep the original downfall of the biome, otherwise it takes a value between 0 and 1").defineInRange("downfall", -1D, -1D, 1D);
         }
 
-        public final ForgeConfigSpec.BooleanValue addPolarBear;
         public final ForgeConfigSpec.EnumValue<ListMode> listMode;
         public final ForgeConfigSpec.ConfigValue<List<? extends String>> biomeList;
+        public final ForgeConfigSpec.DoubleValue downfall;
     }
 }

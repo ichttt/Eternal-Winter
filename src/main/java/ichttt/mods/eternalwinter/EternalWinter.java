@@ -5,6 +5,10 @@ import net.minecraft.entity.EntityClassification;
 import net.minecraft.entity.EntityType;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.biome.Biome;
+import net.minecraft.world.biome.MobSpawnInfo;
+import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.event.world.BiomeLoadingEvent;
+import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.fml.DeferredWorkQueue;
 import net.minecraftforge.fml.ModLoadingContext;
 import net.minecraftforge.fml.common.Mod;
@@ -25,37 +29,31 @@ public class EternalWinter {
 
     public EternalWinter() {
         LOGGER.info("Starting up eternal winter mod");
-        FMLJavaModLoadingContext.get().getModEventBus().addListener(this::onLoadComplete);
+        MinecraftForge.EVENT_BUS.addListener(EventPriority.LOW, this::onLoadComplete);
         ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, EWConfig.generalSpec);
     }
 
-    public void onLoadComplete(FMLLoadCompleteEvent event) { //All biomes should be known by now
-        LOGGER.debug("Modifying Biome stats...");
+    public void onLoadComplete(BiomeLoadingEvent event) { //All biomes should be known by now
+        if (EWConfig.GENERAL.listMode.get() == ListMode.BLACKLIST) {
+            ResourceLocation registryName = event.getName();
+            if (EWConfig.GENERAL.biomeList.get().stream().anyMatch(s -> s.equals(registryName.getPath()) || s.equals(registryName.toString())))
+                return;
+        } else if (EWConfig.GENERAL.listMode.get() == ListMode.WHITELIST) {
+            ResourceLocation registryName = event.getName();
+            if (EWConfig.GENERAL.biomeList.get().stream().noneMatch(s -> s.equals(registryName.getPath()) || s.equals(registryName.toString())))
+                return;
+        } else {
+            throw new RuntimeException("Wrong list mode! " + EWConfig.GENERAL.biomeList.get());
+        }
 
-
-        DeferredWorkQueue.runLater(() -> {
-            int i = 0;
-            for (Biome b : ForgeRegistries.BIOMES) {
-                LOGGER.debug("Modifying Biome {}", b);
-                if (EWConfig.GENERAL.listMode.get() == ListMode.BLACKLIST) {
-                    ResourceLocation registryName = Objects.requireNonNull(b.getRegistryName());
-                    if (EWConfig.GENERAL.biomeList.get().stream().anyMatch(s -> s.equals(registryName.getPath()) || s.equals(registryName.toString())))
-                        continue;
-                } else if (EWConfig.GENERAL.listMode.get() == ListMode.WHITELIST) {
-                    ResourceLocation registryName = Objects.requireNonNull(b.getRegistryName());
-                    if (EWConfig.GENERAL.biomeList.get().stream().noneMatch(s -> s.equals(registryName.getPath()) || s.equals(registryName.toString())))
-                        continue;
-                } else {
-                    throw new RuntimeException("Wrong list mode! " + EWConfig.GENERAL.biomeList.get());
-                }
-                List<Biome.SpawnListEntry> spawnListEntries = b.spawns.computeIfAbsent(EntityClassification.CREATURE, k -> Lists.newArrayList());
-                boolean hasPolarBear = spawnListEntries.stream().map(spawnListEntry -> spawnListEntry.entityType).anyMatch(entityType -> entityType.equals(EntityType.POLAR_BEAR));
-                if (!hasPolarBear) spawnListEntries.add(new Biome.SpawnListEntry(EntityType.POLAR_BEAR, 1, 1, 2));
-                b.precipitation = Biome.RainType.SNOW;
-                b.temperature = 0F;
-                i++;
-            }
-            LOGGER.info("Modified " + i + " Biomes modified successful!");
-        });
+        float downfall = EWConfig.GENERAL.downfall.get().floatValue();
+        if (downfall != -1 && downfall < 0) {
+            LOGGER.error("Invalid downfall " + downfall + ", defaulting to -1!");
+            downfall = -1F;
+        }
+        if (downfall == -1F)
+            downfall = event.getClimate().downfall;
+        event.setClimate(new Biome.Climate(Biome.RainType.SNOW, 0F, Biome.TemperatureModifier.NONE, downfall));
+        LOGGER.debug("Modified Biome {} successful!", event.getName());
     }
 }
