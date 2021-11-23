@@ -1,27 +1,15 @@
 package ichttt.mods.eternalwinter;
 
-import com.google.common.collect.Lists;
-import net.minecraft.entity.EntityClassification;
-import net.minecraft.entity.EntityType;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.world.biome.Biome;
-import net.minecraft.world.biome.MobSpawnInfo;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.level.biome.Biome;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.world.BiomeLoadingEvent;
 import net.minecraftforge.eventbus.api.EventPriority;
-import net.minecraftforge.fml.DeferredWorkQueue;
 import net.minecraftforge.fml.ModLoadingContext;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.config.ModConfig;
-import net.minecraftforge.fml.event.lifecycle.FMLLoadCompleteEvent;
-import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
-import net.minecraftforge.registries.ForgeRegistries;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-
-import java.util.Arrays;
-import java.util.List;
-import java.util.Objects;
 
 @Mod("eternalwinter")
 public class EternalWinter {
@@ -53,7 +41,7 @@ public class EternalWinter {
         }
         if (downfall == -1F)
             downfall = event.getClimate().downfall;
-        event.setClimate(new Biome.Climate(Biome.RainType.SNOW, 0F, Biome.TemperatureModifier.NONE, downfall));
+        event.setClimate(new Biome.ClimateSettings(Biome.Precipitation.SNOW, 0F, Biome.TemperatureModifier.NONE, downfall));
         LOGGER.debug("Modified Biome {} successful!", event.getName());
     }
 }

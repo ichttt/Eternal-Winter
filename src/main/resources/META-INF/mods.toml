@@ -1,6 +1,7 @@
 modLoader="javafml"
 loaderVersion="[26,)"
 license="GNU GENERAL PUBLIC LICENSE Version 3"
+issueTrackerURL="https://github.com/ichttt/Eternal-Winter/issues"
 
 [[mods]]
     modId="eternalwinter"
@@ -9,15 +10,15 @@ license="GNU GENERAL PUBLIC LICENSE Version 3"
     displayURL="https://www.curseforge.com/minecraft/mc-mods/eternal-winter"
     authors="ichttt"
     description='''Eternal Winter is a small mod that enables snow in every biome'''
-[[dependencies.eternalwinter]]
-    modId="forge"
-    mandatory=true
-    versionRange="[34.1.0,)"
-    ordering="NONE"
-    side="BOTH"
+#[[dependencies.eternalwinter]]
+#    modId="forge"
+#    mandatory=true
+#    versionRange="[34.1.0,)"
+#    ordering="NONE"
+#    side="BOTH"
 [[dependencies.eternalwinter]]
     modId="minecraft"
     mandatory=true
-    versionRange="[1.16.3,1.17)"
+    versionRange="[1.17.1,1.18)"
     ordering="NONE"
     side="BOTH"
