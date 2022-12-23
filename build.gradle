@@ -15,7 +15,7 @@ plugins {
 }
 apply plugin: 'net.minecraftforge.gradle'
 
-version = '1.4'
+version = '1.18.2-1.0'
 group = "ichttt.mods.eternalwinter" // http://maven.apache.org/guides/mini/guide-naming-conventions.html
 archivesBaseName = "eternalwinter"
 
