@@ -32,7 +32,7 @@ public class BiomesModifier implements BiomeModifier {
                 builder.getClimateSettings().setDownfall(downfall);
             builder.getClimateSettings().setTemperature(0F);
             builder.getClimateSettings().setTemperatureModifier(Biome.TemperatureModifier.NONE);
-            builder.getClimateSettings().setPrecipitation(Biome.Precipitation.SNOW);
+            builder.getClimateSettings().setHasPrecipitation(true);
             EternalWinter.LOGGER.debug("Modified Biome {} successful!", registryName);
         }
     }
