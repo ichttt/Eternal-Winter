@@ -5,7 +5,7 @@ issueTrackerURL="https://github.com/ichttt/Eternal-Winter/issues"
 
 [[mods]]
     modId="eternalwinter"
-    version="${file.jarVersion}"
+    version="${mod_version}"
     displayName="Eternal Winter"
     displayURL="https://www.curseforge.com/minecraft/mc-mods/eternal-winter"
     authors="ichttt"
@@ -19,6 +19,6 @@ issueTrackerURL="https://github.com/ichttt/Eternal-Winter/issues"
 [[dependencies.eternalwinter]]
     modId="minecraft"
     mandatory=true
-    versionRange="[1.19.2,1.20)"
+    versionRange="[1.20.1,1.21)"
     ordering="NONE"
     side="BOTH"
